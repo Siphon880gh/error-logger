@@ -1,38 +1,22 @@
 import { ERROR_MESSAGES, ERROR_SEVERITIES, ErrorCode, SeverityLevel, AUTH_100, AUTH_102, AUTH_101, API_300, DB_200 } from './data/error-codes/generated';
+import { logger } from './services/logger';
 
 function logWithSeverity(code: ErrorCode, severity: SeverityLevel, err?: unknown) {
   const message = ERROR_MESSAGES[code];
   const codeSeverity = ERROR_SEVERITIES[code];
   
   if (codeSeverity !== severity) {
-    console.warn(`Warning: Logging ${code} with severity ${severity} but it's defined as ${codeSeverity}`);
-  }
-
-  const timestamp = new Date().toISOString();
-  const logMessage = `[${timestamp}] [${code}] [${severity}] ${message}`;
-
-  switch (severity) {
-    case 'INFO':
-      console.info(logMessage);
-      break;
-    case 'WARN':
-      console.warn(logMessage);
-      break;
-    case 'ERROR':
-      console.error(logMessage);
-      break;
-    case 'FATAL':
-      console.error(`FATAL: ${logMessage}`);
-      // In a real application, you might want to:
-      // 1. Send to error monitoring service
-      // 2. Trigger alerts
-      // 3. Exit the process
-      process.exit(1);
-      break;
+    logger.log(code, 'WARN', `Warning: Logging ${code} with severity ${severity} but it's defined as ${codeSeverity}`);
   }
 
   if (err instanceof Error) {
-    console.error('Original error:', err.message);
+    logger.log(code, severity, message, { error: err.message });
+  } else {
+    logger.log(code, severity, message, err);
+  }
+
+  if (severity === 'FATAL') {
+    process.exit(1);
   }
 }
 

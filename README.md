@@ -85,3 +85,12 @@ When you hover over a constant like `AUTH_100`, VS Code:
 3. Displays it in a tooltip
 
 This provides immediate documentation without leaving your code.
+
+if (process.env.NODE_ENV === 'production') {
+  // Production-specific code
+  // - Disable detailed error messages
+  // - Enable caching
+  // - Use production database
+  // - Enable compression
+  // - Set up security headers
+}
