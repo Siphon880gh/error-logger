@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Error code management system demo",
   "scripts": {
-    "generate": "node scripts/genErrorCodes.js",
+    "generate": "echo 'Available generators:\n  npm run generate:codes  - Generate error codes\n  npm run generate:levels - Generate log levels\n\nRunning all generators...' && npm run generate:codes && npm run generate:levels",
+    "generate:codes": "node scripts/genErrorCodes.js",
     "generate:levels": "ts-node src/config/levels/generate.ts",
     "start": "NODE_ENV=production ts-node src/app.ts",
     "start:dev": "NODE_ENV=development ts-node src/app.ts",
