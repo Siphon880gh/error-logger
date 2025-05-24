@@ -1,5 +1,5 @@
 const fs = require('fs');
-const csv = fs.readFileSync('./errorCodes.csv', 'utf-8');
+const csv = fs.readFileSync('./input/errorCodes.csv', 'utf-8');
 const lines = csv.trim().split('\n').slice(1); // skip header
 const out = {};
 for (const line of lines) {

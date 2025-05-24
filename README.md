@@ -11,7 +11,7 @@ A type-safe error code management system with VS Code IntelliSense support.
 
 ## How It Works
 
-### 1. Error Code Definition (errorCodes.csv)
+### 1. Error Code Definition (src/data/error-codes/input.csv)
 ```csv
 code,message
 AUTH-100,Invalid credentials
@@ -19,7 +19,7 @@ DB-200,Database connection failed
 API-300,API limit exceeded
 ```
 
-### 2. Auto-generated TypeScript (errorCodes.ts)
+### 2. Auto-generated TypeScript (src/data/error-codes/generated.ts)
 The generator creates TypeScript code with JSDoc comments that enable IntelliSense:
 
 ```typescript
@@ -46,11 +46,11 @@ The system ensures type safety through:
 
 ## Usage
 
-1. Add error codes to `errorCodes.csv`
+1. Add error codes to `src/data/error-codes/input.csv`
 2. Run `npm run generate` to update TypeScript definitions
 3. Import and use error codes in your code:
 ```typescript
-import { AUTH_100 } from './errorCodes';
+import { AUTH_100 } from './src/data/error-codes/generated';
 
 // Hover over AUTH_100 to see the error message
 logError(AUTH_100, err);

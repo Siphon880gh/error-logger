@@ -1,4 +1,4 @@
-import { ERROR_MESSAGES, ErrorCode, AUTH_100, AUTH_102, AUTH_101 } from './errorCodes';
+import { ERROR_MESSAGES, ErrorCode, AUTH_100, AUTH_102, AUTH_101 } from './data/error-codes/generated';
 
 function logError(code: ErrorCode, err?: unknown) {
   const message = ERROR_MESSAGES[code];
