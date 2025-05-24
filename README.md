@@ -105,6 +105,11 @@ logError(AUTH_100, err);    // ERROR level
 logInfo(USER_400, data);    // INFO level
 logWarn(API_300, limit);    // WARN level
 logFatal(DB_200, connErr);  // FATAL level
+
+// Or use logAppropriate to automatically use the correct severity level
+// based on the error code's definition in the CSV file
+logAppropriate(AUTH_100, err);  // Will log as ERROR
+logAppropriate(USER_400, data); // Will log as INFO
 ```
 
 ## Severity Levels
