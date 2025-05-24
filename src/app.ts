@@ -53,15 +53,30 @@ export function logFatal(code: ErrorCode, err?: unknown) {
   logWithSeverity(code, 'FATAL', err);
 }
 
+/**
+ * Automatically logs using the severity level defined for the error code.
+ * This is the recommended way to log errors as it ensures consistency
+ * with the defined severity levels.
+ */
+export function logAppropriate(code: ErrorCode, data?: unknown) {
+  const severity = ERROR_SEVERITIES[code];
+  logWithSeverity(code, severity, data);
+}
+
 function test() {
   try {
     throw new Error('Simulated failure');
   } catch (err) {
-    // Examples of different severity levels
-    logInfo(API_300, { limit: 100 });     // INFO level
-    logWarn(API_300, { limit: 90 });      // WARN level
-    logError(AUTH_102, err);              // ERROR level
-    // logFatal(DB_200, err);             // FATAL level - uncomment to test
+    // Using logAppropriate - automatically uses the correct severity level
+    logAppropriate(API_300, { limit: 100 });  // Will use WARN level
+    logAppropriate(AUTH_102, err);            // Will use ERROR level
+    logAppropriate(DB_200, err);              // Will use FATAL level
+
+    // You can still use specific severity levels if needed
+    logInfo(API_300, { limit: 100 });     // Forces INFO level
+    logWarn(API_300, { limit: 90 });      // Forces WARN level
+    logError(AUTH_102, err);              // Forces ERROR level
+    // logFatal(DB_200, err);             // Forces FATAL level
   }
 }
 
