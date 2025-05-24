@@ -1,4 +1,4 @@
-import { ERROR_MESSAGES, ErrorCode } from './errorCodes';
+import { ERROR_MESSAGES, ErrorCode, AUTH_100, AUTH_102, AUTH_101 } from './errorCodes';
 
 function logError(code: ErrorCode, err?: unknown) {
   const message = ERROR_MESSAGES[code];
@@ -12,7 +12,7 @@ function test() {
   try {
     throw new Error('Simulated failure');
   } catch (err) {
-    logError('AUTH-100', err); // <-- Hover over 'AUTH-100' shows: Invalid credentials
+    logError(AUTH_102, err); // <-- Hover over AUTH_100 shows: Invalid credentials
   }
 }
 

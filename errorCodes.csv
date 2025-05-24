@@ -2,3 +2,5 @@ code,message
 AUTH-100,Invalid credentials
 DB-200,Database connection failed
 API-300,API limit exceeded 
+AUTH-101,Invalid token
+AUTH-102,Token expired
