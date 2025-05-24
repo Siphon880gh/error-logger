@@ -131,6 +131,36 @@ Logging behavior can be configured per environment in `src/config/environments.j
 - Staging: Console logging enabled for INFO and WARN
 - Production: Console logging disabled, all levels written to file
 
+src/config/environments.json:
+```
+{
+  "development": {
+    "logConfig": {
+      "filePath": "./logs/development.log",
+      "maxLines": 100,
+      "allowConsole": true,
+      "allowedConsoleLevels": ["INFO", "WARN"]
+    }
+  },
+  "staging": {
+    "logConfig": {
+      "filePath": "./logs/staging.log",
+      "maxLines": 100,
+      "allowConsole": true,
+      "allowedConsoleLevels": ["INFO", "WARN"]
+    }
+  },
+  "production": {
+    "logConfig": {
+      "filePath": "./logs/production.log",
+      "maxLines": 100,
+      "allowConsole": false,
+      "allowedConsoleLevels": []
+    }
+  }
+} 
+```
+
 ## How IntelliSense Works
 
 The IntelliSense hover tooltip is powered by:
