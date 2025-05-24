@@ -30,6 +30,9 @@ API-300,API limit exceeded,WARN
 USER-400,User preferences updated,INFO
 ```
 
+> Pro Tip: Have the team use Excel 
+> ![](README-assets/screenshot-excel.png)
+
 ### 2. Log Levels Configuration (src/config/levels/input.json)
 ```json
 {
@@ -77,6 +80,9 @@ Example:
 ```typescript
 logError(AUTH_100, err); // Hover over AUTH_100 to see "Invalid credentials (ERROR)"
 ```
+
+> Hover your mouse over the error code
+> ![](README-assets/screenshot-intellisense.png)
 
 ### 5. Type Safety
 The system ensures type safety through:
