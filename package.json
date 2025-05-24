@@ -1,0 +1,13 @@
+{
+  "name": "error-codes-demo",
+  "version": "1.0.0",
+  "description": "Error code management system demo",
+  "scripts": {
+    "generate": "node scripts/genErrorCodes.js",
+    "start": "ts-node src/app.ts"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.0"
+  }
+} 

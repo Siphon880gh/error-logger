@@ -1,0 +1,4 @@
+code,message
+AUTH-100,Invalid credentials
+DB-200,Database connection failed
+API-300,API limit exceeded 
