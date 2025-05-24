@@ -4,6 +4,7 @@
   "description": "Error code management system demo",
   "scripts": {
     "generate": "node scripts/genErrorCodes.js",
+    "generate:levels": "ts-node src/config/levels/generate.ts",
     "start": "NODE_ENV=production ts-node src/app.ts",
     "start:dev": "NODE_ENV=development ts-node src/app.ts",
     "start:staging": "NODE_ENV=staging ts-node src/app.ts"

@@ -1,4 +1,6 @@
 import { SeverityLevel } from '../data/error-codes/generated';
+import * as fs from 'fs';
+import * as path from 'path';
 
 type Environment = 'development' | 'staging' | 'production';
 
@@ -20,32 +22,24 @@ const defaultConfig: LogConfig = {
   allowedConsoleLevels: ['INFO', 'WARN']
 };
 
-const environmentConfigs: Record<Environment, EnvironmentConfig> = {
-  development: {
-    logConfig: {
-      ...defaultConfig,
-      filePath: './logs/development.log',
-      allowConsole: true,
-      allowedConsoleLevels: ['INFO', 'WARN']
-    }
-  },
-  staging: {
-    logConfig: {
-      ...defaultConfig,
-      filePath: './logs/staging.log',
-      allowConsole: true,
-      allowedConsoleLevels: ['INFO', 'WARN']
-    }
-  },
-  production: {
-    logConfig: {
-      ...defaultConfig,
-      filePath: './logs/production.log',
-      allowConsole: false,
-      allowedConsoleLevels: []
-    }
+// Load environment configurations from JSON file
+const loadEnvironmentConfigs = (): Record<Environment, EnvironmentConfig> => {
+  try {
+    const configPath = path.join(__dirname, 'environments.json');
+    const configFile = fs.readFileSync(configPath, 'utf-8');
+    return JSON.parse(configFile);
+  } catch (error) {
+    console.error('Failed to load environment configurations:', error);
+    // Return default configurations if file loading fails
+    return {
+      development: { logConfig: defaultConfig },
+      staging: { logConfig: defaultConfig },
+      production: { logConfig: defaultConfig }
+    };
   }
 };
+
+const environmentConfigs = loadEnvironmentConfigs();
 
 export const getEnvironment = (): Environment => {
   return (process.env.NODE_ENV as Environment) || 'development';

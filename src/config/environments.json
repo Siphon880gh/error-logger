@@ -1,0 +1,26 @@
+{
+  "development": {
+    "logConfig": {
+      "filePath": "./logs/development.log",
+      "maxLines": 100,
+      "allowConsole": true,
+      "allowedConsoleLevels": ["INFO", "WARN"]
+    }
+  },
+  "staging": {
+    "logConfig": {
+      "filePath": "./logs/staging.log",
+      "maxLines": 100,
+      "allowConsole": true,
+      "allowedConsoleLevels": ["INFO", "WARN"]
+    }
+  },
+  "production": {
+    "logConfig": {
+      "filePath": "./logs/production.log",
+      "maxLines": 100,
+      "allowConsole": false,
+      "allowedConsoleLevels": []
+    }
+  }
+} 

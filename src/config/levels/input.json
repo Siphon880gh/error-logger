@@ -1,0 +1,24 @@
+{
+  "levels": {
+    "INFO": {
+      "description": "Informational messages that don't indicate problems",
+      "consoleAllowed": true,
+      "fileRequired": true
+    },
+    "WARN": {
+      "description": "Warning messages that might indicate potential issues",
+      "consoleAllowed": true,
+      "fileRequired": true
+    },
+    "ERROR": {
+      "description": "Error messages that indicate actual problems",
+      "consoleAllowed": false,
+      "fileRequired": true
+    },
+    "FATAL": {
+      "description": "Critical errors that require immediate attention",
+      "consoleAllowed": false,
+      "fileRequired": true
+    }
+  }
+} 
