@@ -33,7 +33,26 @@ USER-400,User preferences updated,INFO
 > Pro Tip: Have the team use Excel 
 > ![](README-assets/screenshot-excel.png)
 
-### 2. Log Levels Configuration (src/config/levels/input.json)
+### 2. Log Levels Configuration
+
+
+The system supports four severity levels, each configurable in `src/config/levels/input.json`:
+
+- **INFO**: Informational messages that don't indicate problems
+  - Console output allowed
+  - File logging required
+- **WARN**: Warning messages that might indicate potential issues
+  - Console output allowed
+  - File logging required
+- **ERROR**: Error messages that indicate actual problems
+  - Console output disabled
+  - File logging required
+- **FATAL**: Critical errors that require immediate attention
+  - Console output disabled
+  - File logging required
+
+By swapping true or false, you can control if the error message appears in the console and/or a log file. Note that the log filepath may differ depending on if you're on local development or deployed to staging or production, therefore filepath configuration will be at the environment config (will review later).
+
 ```json
 {
   "levels": {
@@ -61,7 +80,12 @@ USER-400,User preferences updated,INFO
 }
 ```
 
-### 3. Auto-generated TypeScript (src/data/error-codes/generated.ts)
+The default configuration follows best practices already, but you may configure it to your liking if you want to.
+
+See Weng's notes on log leveling best practices with regards to sending information to the console or to the log files:
+https://wengindustries.com/app/devbrain/?open=_Software Development Standards, Runtime - Logging#-Log-Levels--Safe-Output-Local-and-Staging-Servers
+
+### 4. Auto-generated TypeScript (src/data/error-codes/generated.ts)
 The generator creates TypeScript code with JSDoc comments that enable IntelliSense:
 
 ```typescript
@@ -69,7 +93,7 @@ The generator creates TypeScript code with JSDoc comments that enable IntelliSen
 export const AUTH_100 = ERROR_CODES.AUTH_100.code;
 ```
 
-### 4. IntelliSense Hover Tooltips
+### 5. IntelliSense Hover Tooltips
 When you hover over an error code constant in VS Code, IntelliSense shows:
 - The error message from the JSDoc comment
 - The severity level
@@ -84,52 +108,22 @@ logError(AUTH_100, err); // Hover over AUTH_100 to see "Invalid credentials (ERR
 > Hover your mouse over the error code
 > ![](README-assets/screenshot-intellisense.png)
 
-### 5. Type Safety
+When you hover over a constant like `AUTH_102`, VS Code:
+1. Reads the JSDoc comment `/** Token expired */`
+2. Combines it with severity level and type information
+3. Displays it in a tooltip
+
+This provides immediate documentation without leaving your code.
+
+### 6. Type Safety
 The system ensures type safety through:
 - Strict TypeScript types
 - Constant assertions
 - Record type for error messages
 - Enum for severity levels
 
-## Usage
 
-1. Add error codes to `src/data/error-codes/input.csv` with appropriate severity levels
-2. Configure log levels in `src/config/levels/input.json`
-3. Run `npm run generate` to update TypeScript definitions
-4. Import and use error codes in your code:
-```typescript
-import { AUTH_100, USER_400 } from './src/data/error-codes/generated';
-
-// Log with different severity levels
-logError(AUTH_100, err);    // ERROR level
-logInfo(USER_400, data);    // INFO level
-logWarn(API_300, limit);    // WARN level
-logFatal(DB_200, connErr);  // FATAL level
-
-// Or use logAppropriate to automatically use the correct severity level
-// based on the error code's definition in the CSV file
-logAppropriate(AUTH_100, err);  // Will log as ERROR
-logAppropriate(USER_400, data); // Will log as INFO
-```
-
-## Severity Levels
-
-The system supports four severity levels, each configurable in `src/config/levels/input.json`:
-
-- **INFO**: Informational messages that don't indicate problems
-  - Console output allowed
-  - File logging required
-- **WARN**: Warning messages that might indicate potential issues
-  - Console output allowed
-  - File logging required
-- **ERROR**: Error messages that indicate actual problems
-  - Console output disabled
-  - File logging required
-- **FATAL**: Critical errors that require immediate attention
-  - Console output disabled
-  - File logging required
-
-## Environment Configuration
+## Setup: Environment Configuration
 
 Logging behavior can be configured per environment in `src/config/environments.json`:
 - Development: Console logging enabled for INFO and WARN
@@ -166,28 +160,59 @@ src/config/environments.json:
 } 
 ```
 
-## How IntelliSense Works
+## Usage
 
-The IntelliSense hover tooltip is powered by:
-1. JSDoc comments in the generated TypeScript
-2. TypeScript's type system
-3. VS Code's language server
+1. Add error codes to `src/data/error-codes/input.csv` with appropriate severity levels. They must match capilization and spelling between the `src/config/levels/input.json` and the csv spreadsheet: INFO, WARN, ERROR, FATAL.
+2. Optionally, configure log levels in `src/config/levels/input.json`
+3. Configure environmental settings which includes logging file paths, at `src/config/environments.json`
+4. Input your error codes and severeity levels at `data/error-codes/input.csv`.
+3. Run `npm run generate` to update all configs and error codes, in addition to updating the IntelliSense hovering tooltips inside VS Code.
+4. Import and use error codes in your code:
+```typescript
+import { AUTH_100, USER_400 } from './src/data/error-codes/generated';
 
-When you hover over a constant like `AUTH_100`, VS Code:
-1. Reads the JSDoc comment `/** Invalid credentials */`
-2. Combines it with severity level and type information
-3. Displays it in a tooltip
+// Log with different severity levels
+logError(AUTH_100, err);    // ERROR level
+logInfo(USER_400, data);    // INFO level
+logWarn(API_300, limit);    // WARN level
+logFatal(DB_200, connErr);  // FATAL level
 
-This provides immediate documentation without leaving your code.
+// Or use logAppropriate to automatically use the correct severity level
+// based on the error code's definition in the CSV file
+logAppropriate(AUTH_100, err);  // Will log as ERROR
+logAppropriate(USER_400, data); // Will log as INFO
+```
 
-if (process.env.NODE_ENV === 'production') {
-  // Production-specific code
-  // - Disable detailed error messages
-  // - Enable caching
-  // - Use production database
-  // - Enable compression
-  // - Set up security headers
+5. Test in different environments:
+
+The `package.json` file defines how to start the app in different environments:
+
+```
+"start": "NODE_ENV=production ts-node src/app.ts",
+"start:dev": "NODE_ENV=development ts-node src/app.ts",
+"start:staging": "NODE_ENV=staging ts-node src/app.ts"
+```
+
+Use the appropriate npm run command to start the app in the desired environment—for example, npm run start:dev for development.
+
+The app will log errors to the file path specified for that environment in your environments.json.
+
+For example, running `npm run start` it'll simulate a crash on the console log and then writes error information to the file `logs/production.log`:
+- You do not need logs/ folder to exist beacuse the logger automatically creates that folder if it doesn't exist.
+```
+[2025-05-25T04:10:45.696Z] [API-300] [WARN] API limit exceeded
+Data: {
+  "limit": 100
 }
+[2025-05-25T04:10:45.697Z] [AUTH-102] [ERROR] Token expired
+Data: {
+  "error": "Simulated failure"
+}
+[2025-05-25T04:10:45.697Z] [DB-200] [FATAL] Database connection failed
+Data: {
+  "error": "Simulated failure"
+}
+```
 
 ## Future Plans
 
@@ -220,3 +245,9 @@ const manager = new ErrorCodeManager({
    - Performance optimizations
 
 Stay tuned for the release!
+
+## Further Reading
+
+Checkout Weng's notes on best practices of error handling and logging:
+- Error Handling: https://wengindustries.com/app/devbrain/?open=_Software%20Development%20Standards,%20Runtime%20-%20Error%20Handling
+- Logging: https://wengindustries.com/app/devbrain/?open=_Software%20Development%20Standards,%20Runtime%20-%20Logging
