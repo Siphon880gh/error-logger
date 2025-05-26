@@ -83,7 +83,7 @@ By swapping true or false, you can control if the error message appears in the c
 The default configuration follows best practices already, but you may configure it to your liking if you want to.
 
 See Weng's notes on log leveling best practices with regards to sending information to the console or to the log files:
-https://wengindustries.com/app/devbrain/?open=_Software Development Standards, Runtime - Logging#-Log-Levels--Safe-Output-Local-and-Staging-Servers
+https://wengindustries.com/app/devbrain/?open=_Software%20Development%20Standards,%20Runtime%20-%20Logging#-Log-Levels--Safe-Output-Local-and-Staging-Servers
 
 ### 4. Auto-generated TypeScript (src/data/error-codes/generated.ts)
 The generator creates TypeScript code with JSDoc comments that enable IntelliSense:
